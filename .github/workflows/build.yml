@@ -1,0 +1,32 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+permissions: read-all
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+      - name: Install Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+              libxrandr-dev \
+              libxcursor-dev \
+              libxi-dev \
+              libudev-dev \
+              libfreetype-dev \
+              libflac-dev \
+              libvorbis-dev \
+              libgl1-mesa-dev \
+              libegl1-mesa-dev \
+              libfreetype-dev
+      - name: Configure
+        run: cmake --preset debug
+      - name: Build
+        run: cmake --build debug
