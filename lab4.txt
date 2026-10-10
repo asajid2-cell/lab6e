@@ -1,1 +1,16 @@
 Answer written questions here:
+
+1. We start from a low iteration count so the first frame is fast: every pixel has to finish its
+   mandelbrotSmooth call before the frame can be drawn, so starting high would freeze the window
+   (and the first frame after every pan/zoom). The limit then doubles on each idle frame, so a
+   still image still sharpens to full detail quickly.
+
+2. Each pixel is independent, so split the image into blocks of rows and give different blocks to
+   different cores or computers at the same time; one machine can hand out the blocks and collect
+   the results, and no worker needs to talk to any other. The speedup is roughly proportional to
+   how many cores or computers you use.
+
+3. Averaging 4 subpixel samples per pixel anti-aliases the set's boundary, smoothing the speckle
+   and jaggies at the cost of slightly softer edges. It costs about four times the work, since
+   every pixel now needs four escape-time evaluations instead of one.
+
